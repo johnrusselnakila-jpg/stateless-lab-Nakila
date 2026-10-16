@@ -75,10 +75,11 @@ class SectionHeader extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+            // Customize: heading text is bold and tinted with the theme's primary color.
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const Divider(),
         ],
@@ -122,14 +123,24 @@ class StudentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Card(
+      // Customize: rounded card corners (radius 16) instead of the default shape.
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        // Customize: extra horizontal padding (18) so the card content breathes.
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         child: Row(
           children: [
             CircleAvatar(
               radius: 24,
+              // Customize: avatar colors taken from the theme palette (primaryContainer).
+              backgroundColor: colorScheme.primaryContainer,
+              foregroundColor: colorScheme.onPrimaryContainer,
               child: Text(student.name[0]),
             ),
             const SizedBox(width: 16),
@@ -139,9 +150,11 @@ class StudentCard extends StatelessWidget {
                 children: [
                   Text(
                     student.name,
+                    // Customize: name style adds a larger size and slight letter spacing.
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 17,
+                      letterSpacing: 0.3,
                     ),
                   ),
                   Text(
@@ -191,6 +204,11 @@ class DirectoryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // Customize: app-wide theme — indigo seed color + Material 3 enabled.
+      theme: ThemeData(
+        colorSchemeSeed: Colors.indigo,
+        useMaterial3: true,
+      ),
       home: const DirectoryScreen(),
     );
   }
