@@ -29,36 +29,45 @@ class Student {
 /// Hard-coded sample directory data (no user input, so it can stay `const`).
 const List<Student> students = <Student>[
   Student(
-    name: 'Maria Santos',
+    name: 'John Peter Deloso',
     course: 'BS Information Technology',
     yearLevel: 3,
-    email: 'maria.santos@school.edu',
+    email: 'johnpeter.deloso@csucc.edu.ph',
   ),
   Student(
-    name: 'Juan Dela Cruz',
-    course: 'BS Computer Science',
-    yearLevel: 1,
-    email: 'juan.delacruz@school.edu',
-  ),
-  Student(
-    name: 'Angelica Reyes',
-    course: 'BS Information Systems',
-    yearLevel: 2,
-    email: 'angelica.reyes@school.edu',
-  ),
-  Student(
-    name: 'Ramon Bautista',
+    name: 'Marne Betanio',
     course: 'BS Information Technology',
-    yearLevel: 4,
-    email: 'ramon.bautista@school.edu',
+    yearLevel: 3,
+    email: 'marne.betanio@csucc.edu.ph',
   ),
   Student(
-    name: 'Kristine Lim',
-    course: 'BS Computer Science',
+    name: 'John Russel Nakila',
+    course: 'BS Information Technology',
     yearLevel: 3,
-    email: 'kristine.lim@school.edu',
+    email: 'johnrussel.nakila@csucc.edu.ph',
+  ),
+  Student(
+    name: 'Ashley Joy Pullos',
+    course: 'BS Information Technology',
+    yearLevel: 3,
+    email: 'ashleyjoy.pullos@csucc.edu.ph',
+  ),
+  Student(
+    name: 'Jian Reiner Dablo',
+    course: 'BS Information Technology',
+    yearLevel: 3,
+    email: 'jianreiner.dablo@csucc.edu.ph',
   ),
 ];
+
+// Customize: maps each year level to its own accent color (Y1 teal, Y2 orange, Y3 indigo, Y4 pink).
+Color _yearLevelColor(int yearLevel) => switch (yearLevel) {
+      1 => Colors.teal,
+      2 => Colors.orange,
+      3 => Colors.indigo,
+      4 => Colors.pink,
+      _ => Colors.blueGrey,
+    };
 
 // Stateless because it only shows a fixed heading; no data ever changes.
 class SectionHeader extends StatelessWidget {
@@ -68,18 +77,37 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+      // Customize: slightly more vertical spacing above and below the header.
+      padding: const EdgeInsets.fromLTRB(4, 28, 4, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            // Customize: heading text is bold and tinted with the theme's primary color.
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              // Customize: small rounded accent bar in the theme's primary color.
+              Container(
+                width: 6,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
+                  borderRadius: BorderRadius.circular(3),
                 ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  // Customize: larger bold title tinted with the theme's primary color.
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+            ],
           ),
           const Divider(),
         ],
@@ -97,15 +125,22 @@ class InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
-          Icon(icon, size: 16),
+          // Customize: icon tinted with the theme's primary color.
+          Icon(icon, size: 16, color: colorScheme.primary),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               text,
+              // Customize: slightly smaller grey text style for secondary info.
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -124,24 +159,38 @@ class StudentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    // Customize: avatar and badge color is unique for each year level.
+    final Color yearColor = _yearLevelColor(student.yearLevel);
 
     return Card(
-      // Customize: rounded card corners (radius 16) instead of the default shape.
+      // Customize: rounded card corners (radius 16) with a softer, larger elevation.
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 4,
+      // Customize: soft tinted card background using the theme's surfaceContainerHighest color.
+      color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
+      // Customize: cards rely on the list padding for horizontal spacing, so only a bottom margin.
+      margin: const EdgeInsets.only(bottom: 14),
       child: Padding(
         // Customize: extra horizontal padding (18) so the card content breathes.
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CircleAvatar(
-              radius: 24,
-              // Customize: avatar colors taken from the theme palette (primaryContainer).
-              backgroundColor: colorScheme.primaryContainer,
-              foregroundColor: colorScheme.onPrimaryContainer,
-              child: Text(student.name[0]),
+              // Customize: larger avatar (radius 30) tinted by year level, with a white bold initial.
+              radius: 30,
+              backgroundColor: yearColor,
+              foregroundColor: Colors.white,
+              child: Text(
+                student.name[0],
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -150,17 +199,21 @@ class StudentCard extends StatelessWidget {
                 children: [
                   Text(
                     student.name,
-                    // Customize: name style adds a larger size and slight letter spacing.
+                    // Customize: bolder, larger name style with slight letter spacing.
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 17,
+                      fontSize: 19,
                       letterSpacing: 0.3,
                     ),
                   ),
+                  const SizedBox(height: 2),
                   Text(
                     student.course,
+                    // Customize: course shown in a muted grey tone.
+                    style: TextStyle(color: colorScheme.onSurfaceVariant),
                     overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 6),
                   InfoRow(
                     icon: Icons.school,
                     text: 'Year ${student.yearLevel}',
@@ -170,6 +223,23 @@ class StudentCard extends StatelessWidget {
                     text: student.email,
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            // Customize: rounded "Year N" badge tinted by the student's year level.
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: yearColor.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                'Year ${student.yearLevel}',
+                style: TextStyle(
+                  color: yearColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ),
             ),
           ],
@@ -185,13 +255,42 @@ class DirectoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Campus Directory')),
-      body: ListView(
-        children: [
-          const SectionHeader(title: 'Students'),
-          ...students.map((student) => StudentCard(student: student)),
-        ],
+      // Customize: AppBar on the primary color with a white, bold, centered title and a school icon.
+      appBar: AppBar(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: Colors.white,
+        centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.school),
+            const SizedBox(width: 8),
+            const Text(
+              'Campus Directory',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+      // Customize: constrain the list to 600px so it stays phone-sized on wide screens.
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: ListView(
+            // Customize: consistent padding around the whole list.
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+            children: [
+              const SectionHeader(title: 'Students'),
+              ...students.map((student) => StudentCard(student: student)),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -204,10 +303,12 @@ class DirectoryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Customize: app-wide theme — indigo seed color + Material 3 enabled.
+      // Customize: richer deep-purple seed color with Material 3 kept on.
       theme: ThemeData(
-        colorSchemeSeed: Colors.indigo,
+        colorSchemeSeed: Colors.deepPurple,
         useMaterial3: true,
+        // Customize: light lavender scaffold background so the tinted cards stand out.
+        scaffoldBackgroundColor: const Color(0xFFF3F0FB),
       ),
       home: const DirectoryScreen(),
     );
