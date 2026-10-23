@@ -278,19 +278,13 @@ class DirectoryScreen extends StatelessWidget {
           ],
         ),
       ),
-      // Customize: constrain the list to 600px so it stays phone-sized on wide screens.
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: ListView(
-            // Customize: consistent padding around the whole list.
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            children: [
-              const SectionHeader(title: 'Students'),
-              ...students.map((student) => StudentCard(student: student)),
-            ],
-          ),
-        ),
+      body: ListView(
+        // Customize: consistent padding around the whole list.
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        children: [
+          const SectionHeader(title: 'Students'),
+          ...students.map((student) => StudentCard(student: student)),
+        ],
       ),
     );
   }
