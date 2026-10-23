@@ -303,6 +303,7 @@ class DirectoryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       // Customize: richer deep-purple seed color with Material 3 kept on.
       theme: ThemeData(
         colorSchemeSeed: Colors.deepPurple,
